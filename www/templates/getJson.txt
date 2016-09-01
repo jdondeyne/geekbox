@@ -1,0 +1,93 @@
+  $.getJSON('http://whateverorigin.org/get?url=' + encodeURIComponent('https://kinepolis.fr/aujourdhui') + '&callback=?', function(data){
+      
+    /*var htmlBloc = strip(data.contents);*/
+      
+    /*Retrait des blancs*/
+    /*htmlBloc = htmlBloc.replace(/(\r\n|\n|\r)/gm,"");*/
+      
+      var myRegex = /"kinepolis_movie_filter":(.*),"kinepolis_external_banners":/;
+      var jsonArray = myRegex.exec(data.contents);
+      
+    
+      var json = jsonArray[1];
+      var obj = JSON.parse(json);
+      
+      $scope.movies = obj.list;
+      
+      /*refresh view*/
+      $state.go($state.current, {}, {reload: true});
+      
+      console.log($scope.movies);
+      
+      var date = new Date().getTime();
+      
+      $scope.poster = function(nid){
+         /* La date sert a rafraichir les images sinon erreur 404*/
+          var url = "http://kinepolis.fr/sites/kinepolis.fr/files/styles/kinepolis_filter_movie_poster/public/posters/" + first($scope.movies[nid].data.poster).filename + "?t=" + date;
+          
+          return url;
+      };
+      
+            
+      $scope.director = function(nid){
+          var direc = "";
+
+          if($scope.movies[nid].data.director != undefined){
+              direc = first($scope.movies[nid].data.director).title;  
+          }
+          
+          return direc;
+      };
+      
+  });
+  
+  
+  
+  ------------------------------------------------
+  
+  
+  
+      var kineUrl = 'http://whateverorigin.org/get?url=' + encodeURIComponent('https://kinepolis.fr/aujourdhui') + '&callback=?';
+    
+    $http({
+      method: 'JSONP',
+      url: kineUrl
+    }).then(function successCallback(response) {
+                          var myRegex = /"kinepolis_movie_filter":(.*),"kinepolis_external_banners":/;
+              jsonArray = myRegex.exec(data.contents);  
+
+              json = jsonArray[1];
+
+              var obj = JSON.parse(json);
+
+                 
+              $scope.movies = obj.list;
+              console.log($scope.movies); 
+        
+        
+             /*refresh view*/
+              $state.go($state.current, {}, {reload: true});
+        
+              var date = new Date().getTime();
+    
+              $scope.poster = function(nid){
+                 /* La date sert a rafraichir les images sinon erreur 404*/
+                  var url = "http://kinepolis.fr/sites/kinepolis.fr/files/styles/kinepolis_filter_movie_poster/public/posters/" + first($scope.movies[nid].data.poster).filename + "?t=" + date;
+
+                  return url;
+              };
+
+
+              $scope.director = function(nid){
+                  var direc = "";
+
+                  if($scope.movies[nid].data.director != undefined){
+                      direc = first($scope.movies[nid].data.director).title;  
+                  }
+
+                  return direc;
+              };
+      }, function errorCallback(response) {
+         console.log("errorCallback");
+      });
+    

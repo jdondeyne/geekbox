@@ -1,0 +1,71 @@
+<!--
+  This template loads for the 'tab.friend-detail' state (app.js)
+  'friend' is a $scope variable created in the FriendsCtrl controller (controllers.js)
+  The FriendsCtrl pulls data from the Friends service (service.js)
+  The Friends service returns an array of friend data
+-->
+<ion-view view-title="{{movie.title}}">
+  <ion-content class="padding">
+        <img class="poster-big" ng-repeat="poster in movie.data.poster" ng-src="http://kinepolis.fr/sites/kinepolis.fr/files/styles/kinepolis_filter_movie_poster/public/posters/{{poster.filename}}?t={{date}}">
+        
+        <div class="button-bar">
+            <div ng-repeat="trailers in movie.data.trailers track by $index">
+                <div ng-repeat="videos in trailers track by $index">
+                    <!--On prend uniquement la MP4 480p-->
+                    <button ng-if="trailer.filemime == 'video/mp4' && trailer.filename.indexOf('480') > -1 && trailers.title.indexOf('Bande-annonce') > -1" ng-repeat="trailer in videos track by $index" class="button button-dark icon ion-social-youtube" href="#" ng-click="openurl('https://kinepolis.fr/sites/kinepolis.fr/files/trailers/{{trailer.filename}}?t={{date}}');"> Trailer</button>
+                </div>
+            </div>
+            <button class="button button-assertive icon ion-clock" ng-click="showPopup()"> Horaires</button>
+            <button class="button button-positive icon ion-ios-cart" href="#" onclick="window.open('https://kinepolis.fr', '_system', 'location=yes'); return false;"> Tickets</button>
+        </div>
+      
+        <div class="list card">
+          <div ng-if="movie.data.small_synopsys">         
+              <div class="item item-divider"><b>Résumé :</b></div>
+              <div class="item item-body">
+                 {{movie.data.small_synopsys}}
+              </div>    
+          </div>    
+            
+          <div class="item item-divider"><b>Genre :</b></div>
+          <div class="item item-body">
+            <div>
+                <ul><li ng-repeat="genre in movie.data.genre">{{getGenre(genre)}}</li></ul>
+            </div>
+          </div>
+            
+          <div class="item item-divider"><b>Date de sortie :</b></div>
+          <div class="item item-body">
+            <div ng-bind="movie.data.release_date | date:'dd/MM/yyyy'">
+            </div>
+          </div>
+            
+          <div ng-if="movie.data.length > 0">  
+              <div class="item item-divider"><b>Durée :</b></div>
+              <div class="item item-body">
+                <div>
+                    {{movie.data.length}} min
+                </div>
+              </div>
+          </div> 
+            
+          <div ng-if="movie.data.director">    
+              <div class="item item-divider"><b>Réalisé par :</b></div>
+              <div class="item item-body">
+                <div>
+                    <ul><li ng-repeat="director in movie.data.director">{{director.title}}</li></ul>
+                </div>
+              </div>
+          </div>
+            
+          <div ng-if="movie.data.cast">    
+              <div class="item item-divider"><b>Casting :</b></div>
+              <div class="item item-body">
+                <div>
+                    <ul><li ng-repeat="actor in movie.data.cast">{{actor.title}}</li></ul>
+                </div>
+              </div>
+          </div>
+        </div>
+  </ion-content>
+</ion-view>
