@@ -154,7 +154,8 @@ angular.module('starter.controllers', [])
     
     
     $scope.openurl = function(url){
-        window.open(url, '_blank','heigth=600,width=600');   // may alse try $window
+        window.open(url, '_system', 'location=yes');   // may alse try $window
+        return false;
     } 
 
     
