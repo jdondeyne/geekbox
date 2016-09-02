@@ -1,4 +1,4 @@
-<ion-view view-title="Chats">
+<ion-view view-title="Reductions">
   <ion-content>
     <div class="list">
 
@@ -8,12 +8,12 @@
         <span class="badge badge-assertive">{{cineday}}</span>
       </a>
         
-      <a class="item item-icon-left" href="#" onclick="window.open('https://mabanque.bnpparibas/fr/jeux-concours/jeu-printemps-cinema', '_system', 'location=yes'); return false;">
+      <a class="item item-icon-left" href="#" ng-click="openurl('https://mabanque.bnpparibas/fr/jeux-concours/jeu-printemps-cinema');">
         <i class="icon ion-android-film"></i>
         Contremarques BNP (4€)
       </a>
         
-      <a class="item item-icon-left" href="#" onclick="window.open('https://kinepolis.fr/ticketmagique', '_system', 'location=yes'); return false;">
+      <a class="item item-icon-left" href="#" ng-click="openurl('https://kinepolis.fr/ticketmagique');">
         <i class="icon ion-ios-color-wand"></i>
         Ticket magique (5€)
       </a>    

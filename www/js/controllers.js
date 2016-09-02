@@ -126,6 +126,7 @@ angular.module('starter.controllers', [])
         $scope.laserThreeDim = '884';
         $scope.vf = '599';
         $scope.vo = '618_378';
+    
         
         var myPopup = $ionicPopup.show({
           template: '<ion-input>'
@@ -137,8 +138,8 @@ angular.module('starter.controllers', [])
             + '<ion-label ng-if="programmation.version == vo" class="button button-small button-dark" style="display: block;margin-left: auto;margin-right: auto;">VOSTFR 2D</ion-label>'
             + '<ion-label ng-if="programmation.format == laser" class="button button-small button-dark" style="display: block;margin-left: auto;margin-right: auto;">VF Laser Ultra</ion-label>'
             + '<ion-label ng-if="programmation.format == laserThreeDim" class="button button-small button-dark" style="display: block;margin-left: auto;margin-right: auto;">VF Laser 3D</ion-label>'
-            + '</div>'
-            + '</div></ion-input>',
+            + '</div></div>'
+            + '</ion-input>',
           title: 'Horaire du jour - Kinépolis Lomme',
           scope: $scope,
           buttons: [
@@ -152,33 +153,65 @@ angular.module('starter.controllers', [])
 
    };
     
+    document.addEventListener("deviceready", onDeviceReady, false);
+    function onDeviceReady() {
+         window.open = cordova.InAppBrowser.open(url, '_blank', 'location=yes');
+    }
     
     $scope.openurl = function(url){
-        window.open(url, '_system', 'location=yes');   // may alse try $window
+        window.open(url, '_blank', 'location=yes');
         return false;
-    } 
+    }
+
+    
+
 
     
 })
 
 .controller('ReductionsCtrl', function($scope, $cordovaSms) {
-$scope.cineday = 1;    
+    $scope.cineday = 1;    
+
+        document.addEventListener("deviceready", function () {
+            console.log("On entre dans addEventListener");
+            $cordovaSms
+              .send('20000', 'CINE', options)
+              .then(function() {
+                // Success! SMS was sent
+                alert("SMS envoyé!");
+                $scope.cineday = 0;  
+              }, function(error) {
+                // An error occurred
+                alert("Erreur lors de l'envoi du sms : " + error);
+              });
+        });
     
- $scope.demanderCineday = function(){   
-    document.addEventListener("deviceready", function () {
-        console.log("On entre dans addEventListener");
-        $cordovaSms
-          .send('20000', 'CINE', options)
-          .then(function() {
-            // Success! SMS was sent
-            alert("SMS envoyé!");
-            $scope.cineday = 0;  
-          }, function(error) {
-            // An error occurred
-            alert("Erreur lors de l'envoi du sms : " + error);
-          });
-    });
-};
+     $scope.demanderCineday = function(){
+        var options = {
+            replaceLineBreaks: false, // true to replace \n by a new line, false by default
+            android: {
+                intent: 'INTENT'  // send SMS with the native android SMS messaging
+                //intent: '' // send SMS without open any other app
+            }
+        };
+         
+         console.log("On entre dans demanderCineday");
+         var success = function () { alert('Message sent successfully'); };
+         var error = function (e) { alert('Message Failed:' + e); };
+         
+         sms.send('20000',  'CINE', options, success, error);
+
+    };
+    
+    document.addEventListener("deviceready", onDeviceReady, false);
+    function onDeviceReady() {
+        window.open = cordova.InAppBrowser.open(url, '_blank', 'location=yes');
+    }
+    
+    $scope.openurl = function(url){
+        window.open(url, '_blank', 'location=yes');
+        return false;
+    }
  
      
 });
